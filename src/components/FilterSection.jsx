@@ -3,9 +3,9 @@ export default function FilterSection(props) {
     data,
     typeInput,
     typeOnChange,
+    onClick,
     cityOnChange,
-    isChecked,
-    onClick
+    isChecked
   } = props;
 
   // console.log("data inside FilterS", data);
@@ -39,11 +39,12 @@ export default function FilterSection(props) {
             return (
               <>
                 <input
+                  key={brewery}
                   type="checkbox"
-                  name="{brewery.city.toLowerCase()}"
-                  value="{brewery.city.toLowerCase()}"
-                  checked={isChecked}
+                  name={brewery.city.toLowerCase()}
+                  value={brewery.city}
                   onChange={cityOnChange}
+                  ischecked={false}
                 />
                 <label for="{brewery.city.toLowerCase()}">{brewery.city}</label>
               </>

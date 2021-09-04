@@ -5,20 +5,20 @@ import ListSection from "./components/ListSection";
 
 export default function App() {
   const [data, setData] = useState([]);
+  // console.log("Data", data);
   const [dataLi, setDataLi] = useState([]);
+  console.log("Data inside List", dataLi);
 
   const [formInput, setFormInput] = useState("");
   const [searchFormInput, setSearchFormInput] = useState("");
-  const [typeInput, setTypeInput] = useState("");
-
-  const [isChecked, setIsChecked] = useState(
-    new Array(data.length).fill(false)
-  );
+  const [typeInput, setTypeInput] = useState();
 
   // console.log("Form input", formInput);
   // console.log("Search input", searchFormInput);
+  // console.log("Type input", typeInput);
+  const [isChecked, setIsChecked] = useState([]);
+  const [cities, setCities] = [];
   console.log("Checked?", isChecked);
-  console.log("Data", data);
 
   // Fetch request
   const listByState = (formInput) => {
@@ -29,6 +29,7 @@ export default function App() {
       .then((data) => {
         // console.log("Inside Fetch: ", data);
         const dataUpdate = data;
+
         setData(dataUpdate);
         setDataLi(dataUpdate);
       });
@@ -71,12 +72,10 @@ export default function App() {
     }
   };
 
-  //Filter functions
-  //Type
+  //Filter functions by Type
   const typeOnChange = (e) => {
     setTypeInput(e.target.value);
   };
-  // console.log("Input type", typeInput);
 
   const filteredByType = data.filter(
     (brewery) => brewery.brewery_type === typeInput
@@ -92,11 +91,26 @@ export default function App() {
     }
   };
 
-  // City
+  //Filter functions by City
 
-  const cityOnChange = () => {
-    setIsChecked(!isChecked);
+  const handleCityOnChange = (e) => {
+    const checked = e.target.checked;
+    const value = e.target.value;
+    console.log("Checked inside function", checked);
+    console.log("Value inside function", value);
+
+    if (checked) {
+      setIsChecked([...isChecked, value]);
+      const filteredCities = data.filter((brewery) => value === brewery.city);
+      setDataLi(filteredCities);
+    } else {
+      const filteredCities = data.filter((brewery) => value !== brewery.city);
+      setDataLi(filteredCities);
+    }
   };
+
+  //   setIsChecked(e.target.value);
+  // };
 
   return (
     <>
@@ -113,7 +127,7 @@ export default function App() {
               typeInput={typeInput}
               typeOnChange={typeOnChange}
               onClick={handleTypeClick}
-              cityOnChange={cityOnChange}
+              cityOnChange={handleCityOnChange}
               isChecked={isChecked}
             />
           ) : (
@@ -135,3 +149,4 @@ export default function App() {
     </>
   );
 }
+
